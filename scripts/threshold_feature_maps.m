@@ -21,14 +21,19 @@ function [thresholded_paths, threshold_vis] = threshold_feature_maps(feature_pat
            % Have to do this silly [chi 'ea'] thing because of an 
            % idiotic choice I made a while ago. Probably worth
            % fixing at some point.
-           threshold = separate_fit_thresholds(feature_threshold_levels.(feature).(chi)).(feature).([chi 'ea']);
+           threshold_level = feature_threshold_levels.(feature).(chi);
+           % Not significant
+           if threshold_level == 0
+              continue; 
+           end
+           threshold = separate_fit_thresholds(threshold_level).(feature).([chi 'ea']);
            
            thresholded_paths.(feature).(chi) = fullfile(meshes_dir, sprintf('artificially_thresholded_%s_%d_%sh.stc', feature, threshold, chi));
            
            unthresholded_snapshot = mne_read_stc_file1(feature_paths_ea.(feature).(chi));
            
            % We read in a snapshot, so we can just take out one copy of it.
-           data = squeeze(unthresholded_snapshot.data(1,:));
+           data = squeeze(unthresholded_snapshot.data(:, 1));
            
            % Get out the vertex indices of the super-threshold vertices
            threshold_vis.(feature).(chi) = find(data > threshold);
