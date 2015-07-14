@@ -23,7 +23,7 @@ function save_beta_figues(beta_responses_positive, userOptions)
            axis off;
            
            % save the figure
-           saveas(this_figure, sprintf('tonotopy_betas_%s_%sh.png', feature, chi));
+           saveas(this_figure, lower(sprintf('tonotopy_betas_%s-%sh.png', feature, chi)));
            
            % close it
            close(this_figure);
