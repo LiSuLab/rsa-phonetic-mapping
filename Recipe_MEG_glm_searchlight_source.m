@@ -161,8 +161,12 @@ feature_threshold_levels = custom_feature_thresholds();
     separate_fit_thresholds, ...
     userOptions);
     
+% TODO: get this path right, maybe include the to-be-loaded file it in the repo?
+tonotopy_paths = directLoad('');
 
-
+beta_responses = group_tonotopy_betas_inside_patches( ...
+    threshold_vis, ...
+    tonotopy_paths);
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
