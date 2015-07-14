@@ -1,4 +1,4 @@
-function [thresholded_paths, threshold_vis] = threshold_feature_maps(feature_paths_ea, feature_thresholds, userOptions)
+function [thresholded_paths, threshold_vis] = threshold_feature_maps(feature_paths_ea, feature_threshold_levels, separate_fit_thresholds, userOptions)
 
     meshes_dir = fullfile(userOptions.rootPath, 'Meshes');
 
@@ -6,7 +6,7 @@ function [thresholded_paths, threshold_vis] = threshold_feature_maps(feature_pat
     thresholded_paths = struct();
     threshold_vis = struct();
 
-    features = fieldnames(feature_thresholds)';
+    features = fieldnames(feature_threshold_levels)';
     
     for feature = features
        feature = feature{1}; %#ok<FXSET> % unwrap
@@ -15,18 +15,17 @@ function [thresholded_paths, threshold_vis] = threshold_feature_maps(feature_pat
        thresholded_paths.(feature) = struct();
        threshold_vis.(feature) = struct();
        
-       for chi = fieldnames(feature_thresholds.(feature))'
+       for chi = fieldnames(feature_threshold_levels.(feature))'
            chi = chi{1}; %#ok<FXSET> % unwrap
            
-           threshold = feature_thresholds.(feature).(chi);
+           % Have to do this silly [chi 'ea'] thing because of an 
+           % idiotic choice I made a while ago. Probably worth
+           % fixing at some point.
+           threshold = separate_fit_thresholds(feature_threshold_levels.(feature).(chi)).(feature).([chi 'ea']);
            
            thresholded_paths.(feature).(chi) = fullfile(meshes_dir, sprintf('artificially_thresholded_%s_%d_%sh.stc', feature, threshold, chi));
            
-           unthresholded_snapshot = mne_read_stc_file1( ...
-               ...% Have to do this silly [chi 'ea'] thing because of an 
-               ...% idiotic choice I made a while ago. Probably worth
-               ...% fixing at some point.
-               feature_paths_ea.(feature).([chi 'ea']));
+           unthresholded_snapshot = mne_read_stc_file1(feature_paths_ea.(feature).(chi));
            
            % We read in a snapshot, so we can just take out one copy of it.
            data = squeeze(unthresholded_snapshot.data(1,:));
