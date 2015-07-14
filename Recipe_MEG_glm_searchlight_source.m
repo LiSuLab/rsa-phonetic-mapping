@@ -168,6 +168,10 @@ tonotopy_paths = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_map
     threshold_vis, ...
     tonotopy_paths);
 
+save_beta_figues( ...
+    beta_responses_positive, ...
+    userOptions);
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 prints('Cleaning up...');
