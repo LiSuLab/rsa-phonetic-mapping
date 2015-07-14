@@ -134,6 +134,21 @@ prints('Thresholding GLM values...');
 % Print out the thresholded values
 rsa.util.display_singleton_struct(separate_fit_thresholds);
 
+%% Analyse feature patches
+
+% Check to see if the thresholded features in the paper are being extracted
+% properly.
+
+feature_thresholds = custom_feature_thresholds();
+
+thresholded_paths = threshold_feature_maps( ...
+    feature_paths_ea, ...
+    feature_thresholds, ...
+    userOptions);
+    
+
+
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 prints('Cleaning up...');
