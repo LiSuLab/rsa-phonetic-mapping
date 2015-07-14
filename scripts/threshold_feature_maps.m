@@ -28,7 +28,7 @@ function [thresholded_paths, threshold_vis] = threshold_feature_maps(feature_pat
            end
            threshold = separate_fit_thresholds(threshold_level).(feature).([chi 'ea']);
            
-           thresholded_paths.(feature).(chi) = fullfile(meshes_dir, sprintf('artificially_thresholded_%s_%d_%sh.stc', feature, threshold, chi));
+           thresholded_paths.(feature).(chi) = fullfile(meshes_dir, sprintf('artificially_thresholded_%s_%d-%sh.stc', feature, threshold_level, lower(chi)));
            
            unthresholded_snapshot = mne_read_stc_file1(feature_paths_ea.(feature).(chi));
            
