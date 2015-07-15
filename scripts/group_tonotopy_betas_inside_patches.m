@@ -1,8 +1,9 @@
-function [beta_response_plots, beta_response_plots_positive] = group_tonotopy_betas_inside_patches(threshold_vis, tonotopy_paths)
+function [beta_response_plots, beta_response_plots_positive, beta_sds] = group_tonotopy_betas_inside_patches(threshold_vis, tonotopy_paths)
 
     % Initialise
     beta_response_plots = struct();
     beta_response_plots_positive = struct();
+    beta_sds = struct();
 
     % Load in tonotopy betas.
     for chi = 'LR'
@@ -38,6 +39,10 @@ function [beta_response_plots, beta_response_plots_positive] = group_tonotopy_be
            average_over_mask = squeeze( ...
                ...% Average over vertices (dim 1)
                mean(betas_within_mask, 1));
+           
+           % standard deviations
+           beta_sds = squeeze( ...
+               std(betas_within_mask, 1));
            
            % Orient nicely
            % b, t
