@@ -8,15 +8,15 @@ function save_beta_figues(beta_responses, userOptions)
     %% Get the limits across all figures
     
     % Initial values.
-    min_beta = Inf;
-    max_beta = -Inf;
+    min_beta = struct('L', Inf, 'R', Inf);
+    max_beta = struct('L', -Inf, 'R', -Inf);
     
     % no higher than zero
-    min_time_graph = 0;
-    max_time_graph = -Inf;
+    min_time_graph = struct('L', 0, 'R', 0);
+    max_time_graph = struct('L', -Inf, 'R', -Inf);
     
-    min_frequency_graph = 0;
-    max_frequency_graph = -Inf;
+    min_frequency_graph = struct('L', 0, 'R', 0);
+    max_frequency_graph = struct('L', -Inf, 'R', -Inf);
     
     for feature = features
        feature = feature{1}; %#ok<FXSET> % unwrap
@@ -24,24 +24,26 @@ function save_beta_figues(beta_responses, userOptions)
            chi = chi{1}; %#ok<FXSET> % unwrap
            
            beta_matrix = beta_responses.(feature).(chi);
-           min_beta = min(min_beta, min(beta_matrix(:)));
-           max_beta = max(max_beta, max(max_beta(:)));
+           min_beta.(chi) = min(min_beta.(chi), min(beta_matrix(:)));
+           max_beta.(chi) = max(max_beta.(chi), max(beta_matrix(:)));
            
            time_graph = get_time_graph(beta_matrix);
-           min_time_graph = min(min_time_graph, min(time_graph(:)));
-           max_time_graph = max(max_time_graph, max(time_graph(:)));
+           min_time_graph.(chi) = min(min_time_graph.(chi), min(time_graph(:)));
+           max_time_graph.(chi) = max(max_time_graph.(chi), max(time_graph(:)));
            
            frequency_graph = get_frequency_graph(beta_matrix);
-           min_frequency_graph = min(min_frequency_graph, min(frequency_graph(:)));
-           max_frequency_graph = max(max_frequency_graph, max(frequency_graph(:)));
+           min_frequency_graph.(chi) = min(min_frequency_graph.(chi), min(frequency_graph(:)));
+           max_frequency_graph.(chi) = max(max_frequency_graph.(chi), max(frequency_graph(:)));
        end
     end
     
     % Limits
-    abs_max = max(max_beta, abs(min_beta));
-    clims = [-abs_max, abs_max];
-    time_lims = [min_time_graph, max_time_graph];
-    frequency_lims = [min_frequency_graph, max_frequency_graph];
+    for chi = 'LR'
+        abs_max = max(max_beta.(chi), abs(min_beta.(chi)));
+        clims.(chi) = [-abs_max, abs_max];
+        time_lims.(chi) = [min_time_graph.(chi), max_time_graph.(chi)];
+        frequency_lims.(chi) = [min_frequency_graph.(chi), max_frequency_graph.(chi)];
+    end
     
     
     %% Show the figures
@@ -66,7 +68,7 @@ function save_beta_figues(beta_responses, userOptions)
            beta_matrix = beta_responses.(feature).(chi);
            
            % plot the figure
-           imagesc(beta_matrix, clims);
+           imagesc(beta_matrix, clims.(chi));
            
            % make it look nice
            axis off;
@@ -86,7 +88,7 @@ function save_beta_figues(beta_responses, userOptions)
                'LineWidth', 4);
            
            xlim([1, numel(time_graph)]);
-           ylim(time_lims);
+           ylim(time_lims.(chi));
            
            % make it look nice
            axis off;
@@ -106,7 +108,7 @@ function save_beta_figues(beta_responses, userOptions)
                'LineWidth', 4);
            
            xlim([1, numel(frequency_graph)]);
-           ylim(frequency_lims);
+           ylim(frequency_lims.(chi));
            
            % make it look nice
            axis off;
@@ -129,7 +131,7 @@ function save_beta_figues(beta_responses, userOptions)
            subplot(2, 2, 2);
            
            % plot an empty imagesc so we can add a colorbar
-           imagesc([], clims);
+           imagesc([], clims.(chi));
            axis off;
            
            text( ...
