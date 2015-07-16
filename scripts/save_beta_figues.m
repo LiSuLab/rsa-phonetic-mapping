@@ -5,6 +5,47 @@ function save_beta_figues(beta_responses, userOptions)
     
     features = fieldnames(beta_responses)';
     
+    %% Get the limits across all figures
+    
+    % Initial values.
+    min_beta = Inf;
+    max_beta = -Inf;
+    
+    % no higher than zero
+    min_time_graph = 0;
+    max_time_graph = -Inf;
+    
+    min_frequency_graph = 0;
+    max_frequency_graph = -Inf;
+    
+    for feature = features
+       feature = feature{1}; %#ok<FXSET> % unwrap
+       for chi = fieldnames(beta_responses.(feature))'
+           chi = chi{1}; %#ok<FXSET> % unwrap
+           
+           beta_matrix = beta_responses.(feature).(chi);
+           min_beta = min(min_beta, min(beta_matrix(:)));
+           max_beta = max(max_beta, max(max_beta(:)));
+           
+           time_graph = get_time_graph(beta_matrix);
+           min_time_graph = min(min_time_graph, min(time_graph(:)));
+           max_time_graph = max(max_time_graph, max(time_graph(:)));
+           
+           frequency_graph = get_frequency_graph(beta_matrix);
+           min_frequency_graph = min(min_frequency_graph, min(frequency_graph(:)));
+           max_frequency_graph = max(max_frequency_graph, max(frequency_graph(:)));
+       end
+    end
+    
+    % Limits
+    abs_max = max(max_beta, abs(min_beta));
+    clims = [-abs_max, abs_max];
+    time_lims = [min_time_graph, max_time_graph];
+    frequency_lims = [min_frequency_graph, max_frequency_graph];
+    
+    
+    %% Show the figures
+    
     for feature = features
        feature = feature{1}; %#ok<FXSET> % unwrap
        
@@ -24,10 +65,6 @@ function save_beta_figues(beta_responses, userOptions)
            
            beta_matrix = beta_responses.(feature).(chi);
            
-           abs_values = abs(beta_matrix);
-           abs_max_value = max(abs_values(:));
-           clims = [-abs_max_value, abs_max_value];
-           
            % plot the figure
            imagesc(beta_matrix, clims);
            
@@ -43,14 +80,13 @@ function save_beta_figues(beta_responses, userOptions)
            
            subplot(2, 2, 1);
            
-           time_graph = squeeze(mean(beta_matrix, 1));
+           time_graph = get_time_graph(beta_matrix);
            
            plot(time_graph, ...
                'LineWidth', 4);
            
            xlim([1, numel(time_graph)]);
-           % no higher than 0
-           ylim([min(0, min(time_graph(:))), max(time_graph(:))]);
+           ylim(time_lims);
            
            % make it look nice
            axis off;
@@ -64,14 +100,13 @@ function save_beta_figues(beta_responses, userOptions)
            
            subplot(2, 2, 4);
            
-           frequency_graph = squeeze(mean(beta_matrix, 2));
+           frequency_graph = get_frequency_graph(beta_matrix);
            
            plot(frequency_graph, ...
                'LineWidth', 4);
            
            xlim([1, numel(frequency_graph)]);
-           % no higher than 0
-           ylim([min(0, min(frequency_graph(:))), max(frequency_graph(:))]);
+           ylim(frequency_lims);
            
            % make it look nice
            axis off;
@@ -118,3 +153,13 @@ function save_beta_figues(beta_responses, userOptions)
     end
 
 end%function
+
+function time_graph = get_time_graph(beta_matrix)
+    time_graph = squeeze(mean(beta_matrix, 1));
+end%function
+
+
+function frequency_graph = get_frequency_graph(beta_matrix)
+    frequency_graph = squeeze(mean(beta_matrix, 2));
+end%function
+
