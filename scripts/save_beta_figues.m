@@ -11,7 +11,8 @@ function save_beta_figues(beta_responses, userOptions)
        for chi = fieldnames(beta_responses.(feature))'
            chi = chi{1}; %#ok<FXSET> % unwrap
            
-           % make the figure
+           %% make the figure
+           
            this_figure = figure;
            
            % set background colour to white, not grey
@@ -48,9 +49,15 @@ function save_beta_figues(beta_responses, userOptions)
                'LineWidth', 4);
            
            xlim([1, numel(time_graph)]);
+           % no higher than 0
+           ylim([min(0, min(time_graph(:))), max(time_graph(:))]);
            
-           % remove bounding box
-           set(gca, 'box', 'off');
+           % make it look nice
+           axis off;
+           
+           % plot line through zero
+           hold on;
+           plot([1, numel(time_graph)], [0, 0], 'k-');
            
            
            %% Plot the distribution over frequencies
@@ -63,6 +70,15 @@ function save_beta_figues(beta_responses, userOptions)
                'LineWidth', 4);
            
            xlim([1, numel(frequency_graph)]);
+           % no higher than 0
+           ylim([min(0, min(frequency_graph(:))), max(frequency_graph(:))]);
+           
+           % make it look nice
+           axis off;
+           
+           % plot line through zero
+           hold on;
+           plot([1, numel(frequency_graph)], [0, 0], 'k-');
            
            % rotate
            view(90, 90);
