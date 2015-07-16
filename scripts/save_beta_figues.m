@@ -14,47 +14,55 @@ function save_beta_figues(beta_responses, userOptions)
            % make the figure
            this_figure = figure;
            
+           % set background colour to white, not grey
+           set(gcf, 'color', [1 1 1]);
+           
+           %% time-frequency plot
+           
+           subplot(2, 2, 3);
+           
            beta_matrix = beta_responses.(feature).(chi);
            
+           abs_values = abs(beta_matrix);
+           abs_max_value = max(abs_values(:));
+           clims = [-abs_max_value, abs_max_value];
+           
            % plot the figure
-           imagesc(beta_matrix);
+           imagesc(beta_matrix, clims);
            
            % make it look nice
-           colormap(rsa.fig.invert_colormap(gray));
            axis off;
            
-           % save the figure
-           saveas(this_figure, lower(sprintf('tonotopy_betas_%s-%sh.png', feature, chi)));
+           % Use parula because it's good at being symmetric about its
+           % middle.
+           colormap(parula);
            
-           % close it
-           close(this_figure);
            
            %% Plot the distribution over time
            
+           subplot(2, 2, 1);
+           
            time_graph = squeeze(mean(beta_matrix, 1));
            
-           time_fig = figure;
+           plot(time_graph, ...
+               'LineWidth', 4);
            
-           plot(time_graph);
+           xlim([1, numel(time_graph)]);
            
            % remove bounding box
            set(gca, 'box', 'off');
            
-           % set background colour to white, not grey
-           set(gcf, 'color', [1 1 1]);
-           
-           saveas(time_fig, lower(sprintf('time_plot_%s-%sh.png', feature, chi)));
-           
-           close(time_fig);
-           
            
            %% Plot the distribution over frequencies
            
+           subplot(2, 2, 4);
+           
            frequency_graph = squeeze(mean(beta_matrix, 2));
            
-           frequency_fig = figure;
+           plot(frequency_graph, ...
+               'LineWidth', 4);
            
-           plot(frequency_graph);
+           xlim([1, numel(frequency_graph)]);
            
            % rotate
            view(90, 90);
@@ -65,9 +73,30 @@ function save_beta_figues(beta_responses, userOptions)
            % set background colour to white, not grey
            set(gcf, 'color', [1 1 1]);
            
-           saveas(frequency_fig, lower(sprintf('frequency_plot_%s-%sh.png', feature, chi)));
+           %% label it
            
-           close(frequency_fig);
+           subplot(2, 2, 2);
+           
+           % plot an empty imagesc so we can add a colorbar
+           imagesc([], clims);
+           axis off;
+           
+           text( ...
+               ...% position
+               0.5, 0.5, ...
+               ...% string
+               sprintf('%s (%sh)', lower(feature), lower(chi)), ...
+               'FontSize', 24, ...
+               'HorizontalAlignment', 'center');
+           
+           colorbar('SouthOutside');
+           
+           
+           %% Save and close
+           
+           saveas(this_figure, lower(sprintf('beta_plot_%s-%sh.png', feature, chi)));
+           
+           close(this_figure);
            
        end
     end
