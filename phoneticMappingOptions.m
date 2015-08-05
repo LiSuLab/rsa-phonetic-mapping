@@ -78,7 +78,7 @@ userOptions.proPNode = 1;
 % number of workers requested.
 userOptions.nWorkers = 4;
 % In gigabytes, to be distributed amongst all nodes.
-userOptions.memReq = 64;
+userOptions.memReq = 100;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Modality-agnostic analysis options %%
