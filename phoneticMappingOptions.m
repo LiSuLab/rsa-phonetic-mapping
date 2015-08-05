@@ -28,7 +28,7 @@ function userOptions = phoneticMappingOptions()
 userOptions.analysisName = 'masked-lexpro-searchlight';
 
 % This is the root directory of the project.
-userOptions.rootPath = '/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100p';
+userOptions.rootPath = '/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100dnn';
 
 % The path leading to where the scans are stored (not including subject-specific identifiers).
 % "[[subjectName]]" should be used as a placeholder to denote an entry in userOptions.subjectNames

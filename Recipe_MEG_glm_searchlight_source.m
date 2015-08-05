@@ -20,7 +20,7 @@ prints('Preparing model RDMs...');
 
 %models = constructModelRDMs(userOptions);
 % Here are some I made earlier
-models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_triphone_probabilities/triphone-likelihood-RDMs.mat');
+models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_dnn/triphone-likelihood-RDMs.mat');
 
 
 %% %%%%%%%%%%%%%%%%%%%
@@ -103,8 +103,6 @@ first_model_frame = 5;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 prints('Thresholding GLM values...');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-[M, PHONES, FEATURES] = phonetic_feature_matrix();
 
 [h0_paths] = searchlight_GLM_permutation_source( ...
     averageRDMPaths, ...
@@ -117,6 +115,8 @@ prints('Thresholding GLM values...');
     ...%TODO make this into optional argument
     30, ... % 30
     userOptions);
+    
+[M, PHONES, FEATURES] = phonetic_feature_matrix();
 
 % Compute thresholds for different levels of significance.
 % Index equals number of stars.
