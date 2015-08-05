@@ -23,7 +23,7 @@ prints('Preparing model RDMs...');
 models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_dnn/triphone-likelihood-RDMs.mat');
 
 % Trim the unusable frames from the beginning of the model timeline.
-trim_frames = 5;
+trim_frames = 4;
 models = models(trim_frames+1:end, :);
 
 % The lag of the model timeline in miliseconds.
