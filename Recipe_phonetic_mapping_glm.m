@@ -22,6 +22,22 @@ prints('Preparing model RDMs...');
 % Here are some I made earlier
 models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_dnn/triphone-likelihood-RDMs.mat');
 
+% Trim the unusable frames from the beginning of the model timeline.
+trim_frames = 5;
+models = models(trim_frames+1:end, :);
+
+% The lag of the model timeline in miliseconds.
+model_timeline_lag = ...
+    ...% 100ms is the the offset for the alignment of the zero points.  We 
+    ...% expect to see a fit for the models 100ms after the equivalent 
+    ...% stimulus point in the brain data. This is consistent with the 
+    ...% literature.
+    100 ...
+    ...% We further increase the lag by 40ms to account for the fact that 
+    ...% we're trimming the first 4 frames from the model timeline, and 
+    ...% each frame is 10ms long.
+    + 40;
+
 
 %% %%%%%%%%%%%%%%%%%%%
 prints('Preparing masks...');
@@ -38,9 +54,6 @@ else
     slMasks = allBrainMask(userOptions);
 end
 
-
-%% Compute some constats
-nSubjects = numel(userOptions.subjectNames);
 adjacencyMatrices = calculateMeshAdjacency(userOptions.targetResolution, userOptions.sourceSearchlightRadius, userOptions, 'hemis', 'LR');
 
 
@@ -91,14 +104,12 @@ averageRDMPaths = averageSearchlightRDMs(RDMsPaths, userOptions);
 prints('GLM-fitting models to searchlight RDMs...');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-first_model_frame = 5;
-
 [glm_paths, lagSTCMetadatas] = searchlight_dynamicGLM_source( ...
     averageRDMPaths, ...
-    models, first_model_frame, ...
+    models, trim_frames, ...
     slSTCMetadatas, ...
     userOptions, ...
-    'lag', 100);
+    'lag', model_timeline_lag);
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 prints('Thresholding GLM values...');
@@ -110,7 +121,7 @@ prints('Thresholding GLM values...');
     slSTCMetadatas, ...
     lagSTCMetadatas, ...
     ...% FIX ME
-    first_model_frame, ...
+    trim_frames, ...
     ...% number of permutation batches
     ...%TODO make this into optional argument
     30, ... % 30
@@ -145,6 +156,7 @@ separate_fit_thresholds(3) = null_distribution_of_sums( ...
 
 % Print out the thresholded values
 rsa.util.display_singleton_struct(separate_fit_thresholds);
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 prints('Anlysing feature patches...');
