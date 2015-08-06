@@ -20,13 +20,15 @@ function [M, PHONES, FEATURES] = phonetic_feature_matrix()
                 0  0  0  0  0  0  1  0  1  0  0  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0  0  0  0  0 ; ...
         ...%  9. FRICATIVE
                 0  0  0  0  0  0  0  1  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  1  0  0  1  0  0  1 ; ...
-        ...% 10. NASAL
+        ...% 10. SYLLABIC
+                1  1  1  1  1  1  0  0  0  1  1  1  1  0  0  0  1  1  1  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  1  1  0  0  0  0 ; ...
+        ...% 11. NASAL
                 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 ; ...
-        ...% 11. VOICED
+        ...% 12. VOICED
                 1  1  1  1  1  1  1  0  1  1  1  1  1  0  1  0  1  1  1  1  0  1  1  1  1  1  1  1  0  1  0  0  0  0  1  1  1  1  1  1 ; ...
-        ...% 12. OBSTRUENT
+        ...% 13. OBSTRUENT
                 0  0  0  0  0  0  1  1  1  0  0  0  0  1  1  1  0  0  0  1  1  1  1  1  1  0  0  0  1  1  1  1  1  1  0  0  1  1  0  1 ; ...
-        ...% 13. SONORANT
+        ...% 14. SONORANT
                 1  1  1  1  1  1  0  0  0  1  1  1  1  0  0  0  1  1  1  0  0  1  0  0  0  1  1  1  0  1  0  0  0  0  1  1  0  1  1  0 ];
     
     PHONES{1}  = 'AA';
@@ -79,8 +81,9 @@ function [M, PHONES, FEATURES] = phonetic_feature_matrix()
     FEATURES{7}  = 'BACK';
     FEATURES{8}  = 'PLOSIVE';
     FEATURES{9}  = 'FRICATIVE';
-    FEATURES{10} = 'NASAL';
-    FEATURES{11} = 'VOICED';
-    FEATURES{12} = 'OBSTRUENT';
-    FEATURES{13} = 'SONORANT';
+    FEATURES{10} = 'SYLLABIC';
+    FEATURES{11} = 'NASAL';
+    FEATURES{12} = 'VOICED';
+    FEATURES{13} = 'OBSTRUENT';
+    FEATURES{14} = 'SONORANT';
 end
