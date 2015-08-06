@@ -165,7 +165,7 @@ prints('Anlysing feature patches...');
 % Check to see if the thresholded features in the paper are being extracted
 % properly.
 
-feature_threshold_levels = custom_feature_thresholds();
+feature_threshold_levels = custom_feature_thresholds_dnn();
 
 [feature_thresholded_paths, threshold_vis] = threshold_feature_maps( ...
     feature_paths_ea, ...
