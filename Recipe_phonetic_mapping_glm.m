@@ -125,7 +125,7 @@ prints('Thresholding GLM values...');
     30, ... % 30
     userOptions);
     
-[M, PHONES, FEATURES] = phonetic_feature_matrix();
+[M, PHONES, FEATURES] = phonetic_feature_matrix_dnn();
 
 % Compute thresholds for different levels of significance.
 % Index equals number of stars.
