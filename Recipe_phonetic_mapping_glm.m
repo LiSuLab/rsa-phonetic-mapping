@@ -33,10 +33,10 @@ model_timeline_lag = ...
     ...% stimulus point in the brain data. This is consistent with the 
     ...% literature.
     100 ...
-    ...% We further increase the lag by 40ms to account for the fact that 
-    ...% we're trimming the first 4 frames from the model timeline, and 
-    ...% each frame is 10ms long.
-    + 40;
+    ...% We further increase the lag to account for the fact that we're
+    ...% trimming frames from the start of the model timeline, and each
+    ...% frame is 10ms long.
+    + (trim_frames * 10);
 
 
 %% %%%%%%%%%%%%%%%%%%%
