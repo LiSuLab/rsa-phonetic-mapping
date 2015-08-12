@@ -20,7 +20,7 @@ prints('Preparing model RDMs...');
 
 %models = constructModelRDMs(userOptions);
 % Here are some I made earlier
-models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_triphone_dnn/triphone-likelihood-RDMs.mat');
+models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_dnn/triphone-likelihood-RDMs.mat');
 
 % Trim the unusable frames from the beginning of the model timeline.
 trim_frames = 4;
