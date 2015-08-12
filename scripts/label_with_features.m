@@ -17,6 +17,7 @@ function [feature_paths, feature_paths_mean, feature_paths_ea] = label_with_feat
         
         [n_vertices, n_timepoints, n_betas] = size(glm_mesh_betas);
         
+        % v b
         epoch_average_betas = squeeze(mean(glm_mesh_betas, 2));
         
         %% Label and threshold
@@ -28,11 +29,11 @@ function [feature_paths, feature_paths_mean, feature_paths_ea] = label_with_feat
         for f = 1:numel(feature_names)
             
             feature_name = feature_names{f};
-            feature_template = M(f, :);
-        
+            feature_template = logical(FEATURES.(feature_name));
+            
             % Preallocate and reset for this hemisphere
             feature_map = zeros(n_vertices, n_timepoints);
-            epoch_average_feature_map = zeros(n_vertices, 1);
+            feature_map_ea = zeros(n_vertices, 1);
 
             for v = 1:n_vertices
                 for t = 1:n_timepoints
@@ -40,15 +41,15 @@ function [feature_paths, feature_paths_mean, feature_paths_ea] = label_with_feat
                     % Calculate feature fit
                     feature_map(v, t) = dot(beta_values, feature_template');
                 end
-                epoch_average_beta_values = squeeze(epoch_average_betas(v, :));
-                epoch_average_feature_map(v) = dot(epoch_average_beta_values, feature_template');
+                beta_values_ea = squeeze(epoch_average_betas(v, :));
+                feature_map_ea(v) = dot(beta_values_ea, feature_template');
             end
             
             % For display, we pick out the positive values, indicating model
             % fit.
             if show_positives
                feature_map(feature_map < 0) = 0;
-               epoch_average_feature_map(epoch_average_feature_map < 0) = 0;
+               feature_map_ea(feature_map_ea < 0) = 0;
             end
             
             % Collapse over time
@@ -69,7 +70,7 @@ function [feature_paths, feature_paths_mean, feature_paths_ea] = label_with_feat
                 feature_paths_mean.(feature_name).(chi));
             write_stc_snapshot( ...
                 lagSTCMetadatas.(chi), ...
-                epoch_average_feature_map, ...
+                feature_map_ea, ...
                 feature_paths_ea.(feature_name).(chi));
                 
         end%for:features

@@ -2,7 +2,7 @@ function [M, FEATURES] = phonetic_feature_matrix_dnn()
 
     % Feature vectors
     % Broad categories      aa ae ah ao aw ay b  ch d  dh ea eh er ey f  g  hh ia ih iy jh k  l  m  n  ng oh ow oy p  r  s  sh t  th ua uh uw v  w  y  z  zh
-    FEATURES.SONORANT	= [ 1  1  1  1  1  1  0  0  0  0  1  1  1  1  0  0  0  1  1  1  0  0  1  0  0  0  1  1  1  0  1  0  0  0  0  1  1  1  0  1  1  0  0  ];
+    FEATURES.SONORANT   = [ 1  1  1  1  1  1  0  0  0  0  1  1  1  1  0  0  0  1  1  1  0  0  1  0  0  0  1  1  1  0  1  0  0  0  0  1  1  1  0  1  1  0  0  ];
     FEATURES.VOICED     = [ 1  1  1  1  1  1  1  0  1  1  1  1  1  1  0  1  0  1  1  1  1  0  1  1  1  1  1  1  1  0  1  0  0  0  0  1  1  1  1  1  1  0  1  ];
     FEATURES.SYLLABIC   = [ 1  1  1  1  1  1  0  0  0  0  1  1  1  1  0  0  0  1  1  1  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  1  1  1  0  0  0  0  0  ];
     FEATURES.OBSTRUENT  = [ 0  0  0  0  0  0  1  1  1  1  0  0  0  0  1  1  1  0  0  0  1  1  1  1  1  1  0  0  0  1  1  1  1  1  1  0  0  0  1  0  0  1  1  ];

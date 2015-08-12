@@ -53,45 +53,24 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, us
     for feature_i = 1:numel(feature_names)
         
         feature_name = feature_names{feature_i};
-        feature_template = find(FEATURES.(feature_name));
-        
-        feature_fits_h0_both = [];
+        feature_template = logical(FEATURES.(feature_name));
         
         for chi = 'LR'
-            h0_betas_this_feature = h0_betas.(chi)(:, :, feature_template, :); %#ok<FNDSB> "fixing" this causes weird results...
-            feature_fit_h0_maps = sum(h0_betas_this_feature, 3);
-            feature_fits_h0_both = [feature_fits_h0_both; feature_fit_h0_maps(:)];
-            feature_threshold = quantile( ...
-                feature_fit_h0_maps(:), ...
-                ...% It's 1- so that "0.05" becomes the 0.95 quantile.
-                1-threshold);
-            feature_thresholds.(feature_name).(chi) = feature_threshold;
+            h0_betas_this_feature = h0_betas.(chi)(:, :, feature_template, :);
             
-            % epoch average
+            % average betas over epoch
+            
             % v b p
             h0_ea = squeeze(mean(h0_betas_this_feature, 2));
             % v p
             h0_ea = squeeze(sum(h0_ea, 2));
+            
             h0_ea_threshold = quantile( ...
                 h0_ea(:), ...
-                1-threshold);
-            feature_thresholds.(feature_name).([chi 'ea']) = h0_ea_threshold;
+                1 - threshold);
+            
+            feature_thresholds.(feature_name).(chi) = h0_ea_threshold;
        end%for
-        
-        threshold_this_feature_both = quantile( ...
-            feature_fits_h0_both(:), ...
-            1-threshold);
-        feature_thresholds.(feature_name).both = threshold_this_feature_both;
     end%for:feature
-    
-    feature_thresholds.ALL.L = quantile( ...
-        h0_betas.L(:), ...
-        1-threshold);
-    feature_thresholds.ALL.R = quantile( ...
-        h0_betas.R(:), ...
-        1-threshold);
-    feature_thresholds.ALL.both = quantile( ...
-        [h0_betas.L(:); h0_betas.R(:)], ...
-        1-threshold);
         
 end%function
