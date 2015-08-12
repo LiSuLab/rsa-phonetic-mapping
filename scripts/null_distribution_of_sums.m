@@ -1,5 +1,5 @@
 % CW 2015-05 -- 2015-06
-function [feature_thresholds] = null_distribution_of_sums(h0_paths, M, FEATURES, userOptions, varargin)
+function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, userOptions, varargin)
     
     import rsa.*
     import rsa.util.*
@@ -53,7 +53,7 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, M, FEATURES,
     for feature_i = 1:numel(feature_names)
         
         feature_name = feature_names{feature_i};
-        feature_template = find(M(feature_i, :));
+        feature_template = find(FEATURES.(feature_name));
         
         feature_fits_h0_both = [];
         
