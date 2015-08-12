@@ -57,12 +57,16 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, va
         feature_template = logical(FEATURES.(feature_name));
         
         for chi = 'LR'
+            
+            % Select betas within feature.
+            % v t b p
             h0_betas_this_feature = h0_betas.(chi)(:, :, feature_template, :);
             
-            % average betas over epoch
-            
+            % Average betas over epoch.
             % v b p
             h0_ea = squeeze(mean(h0_betas_this_feature, 2));
+            
+            % Sum betas within feature.
             % v p
             h0_ea = squeeze(sum(h0_ea, 2));
             
@@ -71,7 +75,7 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, va
                 1 - threshold);
             
             feature_thresholds.(feature_name).(chi) = h0_ea_threshold;
-       end%for
+       end%for:chi
     end%for:feature
         
 end%function
