@@ -1,5 +1,5 @@
 % CW 2015-06
-function [feature_paths, feature_paths_mean, feature_paths_ea] = label_with_features(glm_paths, M, FEATURES, lagSTCMetadatas, show_positives, userOptions)
+function [feature_paths, feature_paths_ea] = label_with_features(glm_paths, FEATURES, lagSTCMetadatas, show_positives, userOptions)
     
     import rsa.*
     import rsa.meg.*
@@ -52,22 +52,13 @@ function [feature_paths, feature_paths_mean, feature_paths_ea] = label_with_feat
                feature_map_ea(feature_map_ea < 0) = 0;
             end
             
-            % Collapse over time
-            feature_map_mean = squeeze(mean(feature_map, 2));
-            
             feature_paths.(feature_name).(chi) = fullfile(userOptions.rootPath, 'Meshes', sprintf('feature-%s-%sh.stc', lower(feature_name), lower(chi)));
-            feature_paths_mean.(feature_name).(chi) = fullfile(userOptions.rootPath, 'Meshes', sprintf('feature-%s-mean-%sh.stc', lower(feature_name), lower(chi)));
-            feature_paths_ea.(feature_name).(chi) = fullfile(userOptions.rootPath, 'Meshes', sprintf('feature-%s-ea-%sh.stc', lower(feature_name), lower(chi)));
-            
             write_stc_file( ...
                 lagSTCMetadatas.(chi), ...
                 feature_map, ...
                 feature_paths.(feature_name).(chi));
             
-            write_stc_snapshot( ...
-                lagSTCMetadatas.(chi), ...
-                feature_map_mean, ...
-                feature_paths_mean.(feature_name).(chi));
+            feature_paths_ea.(feature_name).(chi) = fullfile(userOptions.rootPath, 'Meshes', sprintf('feature-%s-ea-%sh.stc', lower(feature_name), lower(chi)));
             write_stc_snapshot( ...
                 lagSTCMetadatas.(chi), ...
                 feature_map_ea, ...

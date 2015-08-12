@@ -1,4 +1,4 @@
-function [M, FEATURES] = phonetic_feature_matrix_dnn()
+function FEATURES = phonetic_feature_matrix_dnn()
 
     % Feature vectors
     % Broad categories      aa ae ah ao aw ay b  ch d  dh ea eh er ey f  g  hh ia ih iy jh k  l  m  n  ng oh ow oy p  r  s  sh t  th ua uh uw v  w  y  z  zh
@@ -26,13 +26,6 @@ function [M, FEATURES] = phonetic_feature_matrix_dnn()
     FEATURES.OPEN       = [ 1  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  ];
     % Vowel roundedness
     FEATURES.ROUNDED    = [ 0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  1  1  1  0  0  0  0  0  ];
-
-    % Convert to matrix
-    feature_names = fieldnames(FEATURES);
-    M = [];
-    for feature_i = 1 : numel(feature_names)
-        M = [M; FEATURES.(feature_names{feature_i})];
-    end
 
 end
 
