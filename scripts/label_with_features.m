@@ -23,9 +23,11 @@ function [feature_paths, feature_paths_mean, feature_paths_ea] = label_with_feat
         
         prints('Labelling and thresholding with feature models...');
         
-        for f = 1:numel(FEATURES)
+        feature_names = fieldnames(FEATURES);
+        
+        for f = 1:numel(feature_names)
             
-            feature_name = FEATURES{f};
+            feature_name = feature_names{f};
             feature_template = M(f, :);
         
             % Preallocate and reset for this hemisphere

@@ -48,9 +48,11 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, M, FEATURES,
         
     prints('Computing threshold for each feature template...');
     
-    for feature_i = 1:numel(FEATURES)
+    feature_names = fieldnames(FEATURES);
+    
+    for feature_i = 1:numel(feature_names)
         
-        feature_name = FEATURES{feature_i};
+        feature_name = feature_names{feature_i};
         feature_template = find(M(feature_i, :));
         
         feature_fits_h0_both = [];
