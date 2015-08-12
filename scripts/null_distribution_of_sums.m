@@ -1,5 +1,5 @@
 % CW 2015-05 -- 2015-06
-function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, userOptions, varargin)
+function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, varargin)
     
     import rsa.*
     import rsa.util.*
@@ -34,7 +34,7 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, us
         
         %% Load in the ungrouped null distributions for each hemisphere.
         
-        prints('Loading null distribution...');
+        prints('Loading null distribution for %sh hemi...', lower(chi));
     
         % (vertices, timepoints, betas, permutations)
         h0_betas.(chi) = directLoad(h0_paths.(chi));
@@ -45,14 +45,15 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, us
     end%for:chi
     
     %% A separate sum-distribution for each feature mask.
-        
-    prints('Computing threshold for each feature template...');
     
     feature_names = fieldnames(FEATURES);
     
     for feature_i = 1:numel(feature_names)
         
         feature_name = feature_names{feature_i};
+        
+        prints('Computing threshold for feature "%sh"...', lower(feature_name));
+    
         feature_template = logical(FEATURES.(feature_name));
         
         for chi = 'LR'
