@@ -52,7 +52,7 @@ function [feature_thresholds] = null_distribution_of_sums(h0_paths, FEATURES, va
         
         feature_name = feature_names{feature_i};
         
-        prints('Computing threshold for feature "%sh"...', lower(feature_name));
+        prints('Computing threshold for feature "%s"...', lower(feature_name));
     
         feature_template = logical(FEATURES.(feature_name));
         
