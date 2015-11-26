@@ -20,7 +20,7 @@ prints('Preparing model RDMs...');
 
 %models = constructModelRDMs(userOptions);
 % Here are some I made earlier
-models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_dnn/triphone-likelihood-RDMs.mat');
+models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_triphone_probabilities/triphone-likelihood-RDMs.mat');
 
 % Trim the unusable frames from the beginning of the model timeline.
 trim_frames = 4;
@@ -125,7 +125,7 @@ prints('Thresholding GLM values...');
     30, ... % 30
     userOptions);
     
-FEATURES = phonetic_feature_matrix_dnn();
+FEATURES = phonetic_feature_matrix();
 
 [feature_paths, feature_paths_ea] = label_with_features( ...
     glm_paths, ...

@@ -25,15 +25,16 @@ function userOptions = phoneticMappingOptions()
 %%%%%%%%%%%%%%%%%%%%%
 
 % This name identifies a collection of files which all belong to the same run of a project.
-userOptions.analysisName = 'masked-lexpro-searchlight';
+userOptions.analysisName = 'lexpro-fixed-feature-matrix';
 
 % This is the root directory of the project.
-userOptions.rootPath = '/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100dnn';
+userOptions.rootPath = '/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100p';
 
 % The path leading to where the scans are stored (not including subject-specific identifiers).
 % "[[subjectName]]" should be used as a placeholder to denote an entry in userOptions.subjectNames
 % "[[betaIdentifier]]" should be used as a placeholder to denote an output of betaCorrespondence.m if SPM is not being used; or an arbitrary filename if SPM is being used.
-userOptions.betaPath = '/imaging/at03/NKG_Code_output/Version4_2/LexproMEG/3-single-trial-source-data/vert10242-smooth5-nodepth-eliFM-snr1-signed/[[betaIdentifier]]';
+%userOptions.betaPath = '/imaging/at03/NKG_Code_output/Version4_2/LexproMEG/3-single-trial-source-data/vert10242-smooth5-nodepth-eliFM-snr1-signed/[[betaIdentifier]]';
+userOptions.betaPath = '/imaging/cw04/Neurolex/Lexpro/Data/EMEG_processed_single_trial_source/vert10242-smooth5-nodepth-eliFM-snr1-signed/[[betaIdentifier]]';
 
 %%%%%%%%%%%%%%%%%%%
 %% Email Options %%
@@ -71,14 +72,14 @@ userOptions.flush_Queue = true;
 % i.e. when run_in_parallel_in_cluster = true;
 userOptions.wallTime = '24:00:00';
 % Cluster machines requested.
-userOptions.nodesReq = 4;
+userOptions.nodesReq = 8;
 % Processors requested per processor machine.
 userOptions.proPNode = 1;
 % The product of nodesReq and proPNode should be greater or equal to the
 % number of workers requested.
-userOptions.nWorkers = 4;
+userOptions.nWorkers = 8;
 % In gigabytes, to be distributed amongst all nodes.
-userOptions.memReq = 100;
+userOptions.memReq = 400;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Modality-agnostic analysis options %%
@@ -87,8 +88,8 @@ userOptions.memReq = 100;
 % The path to a stereotypical mask data file is stored (not including subject-specific identifiers).
 % "[[subjectName]]" should be used as a placeholder to denote an entry in userOptions.subjectNames
 % "[[maskName]]" should be used as a placeholder to denote an entry in userOptions.maskNames
-userOptions.maskPath = '/imaging/fj01/cw04/New_Labels/[[maskName]]';
-%userOptions.maskPath = '/imaging/ef02/lexpro/subject/average/label/[[maskName]]';
+%userOptions.maskPath = '/imaging/cw04/Neurolex/Lexpro/Masks/[[maskName]]';
+userOptions.maskPath = '/imaging/ef02/lexpro/subject/average/label/[[maskName]]';
 
 % The list of mask filenames (minus .hdr extension) to be used.
 % For MEG, names should be in pairs, such as maskName-lh,
@@ -98,8 +99,8 @@ userOptions.maskPath = '/imaging/fj01/cw04/New_Labels/[[maskName]]';
 % For MEG sensor-level analysis, only the use of a single mask is
 % supported.
 userOptions.maskNames = { ...
-    'STG_STS_HG-lh', 'STG_STS_HG-rh', ...
-    ...%'lateral-lh', 'lateral-rh',...
+    ...'STG_STS_HG-lh', 'STG_STS_HG-rh', ...
+    ...%'lateral-lh', 'lateral-rh', ...
 };
 
 % The type of pattern to look at.
@@ -164,8 +165,10 @@ userOptions.searchlightRadius = 15;
 %% %% %% %% %%
 
 % The average surface files
-userOptions.averageSurfaceFiles.L = '/imaging/ef02/lexpro/subject/average/surf/lh.inflated';
-userOptions.averageSurfaceFiles.R = '/imaging/ef02/lexpro/subject/average/surf/rh.inflated';
+%userOptions.averageSurfaceFiles.L = '/imaging/ef02/lexpro/subject/average/surf/lh.inflated';
+userOptions.averageSurfaceFiles.L = '/imaging/cw04/Neurolex/Lexpro/Data/surfaces/lh.inflated';
+%userOptions.averageSurfaceFiles.R = '/imaging/ef02/lexpro/subject/average/surf/rh.inflated';
+userOptions.averageSurfaceFiles.R = '/imaging/cw04/Neurolex/Lexpro/Data/surfaces/rh.inflated';
 
 % The width of the sliding window (ms)
 userOptions.temporalSearchlightWidth = 60; %20;

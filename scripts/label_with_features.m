@@ -29,7 +29,7 @@ function [feature_paths, feature_paths_ea] = label_with_features(glm_paths, FEAT
             
             feature_name = feature_names{f};
         
-            prints('Labelling and thresholding with feature model "%sh"...', lower(feature_name));
+            prints('Labelling and thresholding with feature model "%s"...', lower(feature_name));
         
             feature_template = logical(FEATURES.(feature_name));
             
