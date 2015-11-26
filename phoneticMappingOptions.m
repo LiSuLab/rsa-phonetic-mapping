@@ -174,7 +174,7 @@ userOptions.temporalSearchlightWidth = 60; %20;
 userOptions.temporalSearchlightTimestep = 10;
 
 % The overall window of interest for searchlight (ms)
-userOptions.temporalSearchlightLimits = [0 270];
+userOptions.temporalSearchlightLimits = [0 370];
 
 % Temporal downsampling
 % E.g., a value of 10 here means only taking each 10th point in time.
@@ -192,7 +192,7 @@ userOptions.temporalDownsampleRate = 1;
 % For searchlight analysis, these values will be ignored and
 % userOptions.temporalSearchlightLimits will be used instead.
 userOptions.maskTimeWindows = {
-    [0 200],[0 200] ...
+    [0, 370], [0, 370] ...
 };
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
