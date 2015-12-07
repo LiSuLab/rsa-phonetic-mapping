@@ -72,14 +72,14 @@ userOptions.flush_Queue = true;
 % i.e. when run_in_parallel_in_cluster = true;
 userOptions.wallTime = '24:00:00';
 % Cluster machines requested.
-userOptions.nodesReq = 8;
+userOptions.nodesReq = 6;
 % Processors requested per processor machine.
 userOptions.proPNode = 1;
 % The product of nodesReq and proPNode should be greater or equal to the
 % number of workers requested.
-userOptions.nWorkers = 8;
+userOptions.nWorkers = 6;
 % In gigabytes, to be distributed amongst all nodes.
-userOptions.memReq = 400;
+userOptions.memReq = 240;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Modality-agnostic analysis options %%
@@ -88,8 +88,8 @@ userOptions.memReq = 400;
 % The path to a stereotypical mask data file is stored (not including subject-specific identifiers).
 % "[[subjectName]]" should be used as a placeholder to denote an entry in userOptions.subjectNames
 % "[[maskName]]" should be used as a placeholder to denote an entry in userOptions.maskNames
-%userOptions.maskPath = '/imaging/cw04/Neurolex/Lexpro/Masks/[[maskName]]';
-userOptions.maskPath = '/imaging/ef02/lexpro/subject/average/label/[[maskName]]';
+userOptions.maskPath = '/imaging/cw04/Neurolex/Lexpro/Masks/[[maskName]]';
+%userOptions.maskPath = '/imaging/ef02/lexpro/subject/average/label/[[maskName]]';
 
 % The list of mask filenames (minus .hdr extension) to be used.
 % For MEG, names should be in pairs, such as maskName-lh,
@@ -99,7 +99,7 @@ userOptions.maskPath = '/imaging/ef02/lexpro/subject/average/label/[[maskName]]'
 % For MEG sensor-level analysis, only the use of a single mask is
 % supported.
 userOptions.maskNames = { ...
-    ...'STG_STS_HG-lh', 'STG_STS_HG-rh', ...
+    'STG_STS_HG-lh', 'STG_STS_HG-rh', ...
     ...%'lateral-lh', 'lateral-rh', ...
 };
 
