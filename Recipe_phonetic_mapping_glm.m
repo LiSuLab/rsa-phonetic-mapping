@@ -20,7 +20,7 @@ prints('Preparing model RDMs...');
 
 %models = constructModelRDMs(userOptions);
 % Here are some I made earlier
-models = directLoad('/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/Model_HTK_triphone_probabilities/triphone-likelihood-RDMs.mat');
+models = directLoad('/imaging/cw04/CSLB/Lexpro/Analysis_Phonetic_mapping/Model_HTK_triphone_probabilities/triphone-likelihood-RDMs.mat');
 
 % Trim the unusable frames from the beginning of the model timeline.
 trim_frames = 4;
@@ -54,7 +54,7 @@ else
     slMasks = allBrainMask(userOptions);
 end
 
-adjacencyMatrices = calculateMeshAdjacency(userOptions.targetResolution, userOptions.sourceSearchlightRadius, userOptions, 'hemis', 'LR');
+adjacencyMatrix = calculateMeshAdjacency(userOptions.targetResolution, userOptions.sourceSearchlightRadius, userOptions);
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,8 +87,7 @@ prints('Searchlight Brain RDM Calculation...');
 [RDMsPaths, slSTCMetadatas] = MEGSearchlightRDMs_source( ...
     meshPaths, ...
     slMasks, ...
-    ...% Assume that both hemis' adjacency matrices are the same so only use one.
-    adjacencyMatrices.L, ...
+    adjacencyMatrix, ...
     STCMetadatas, ...
     userOptions);
 
