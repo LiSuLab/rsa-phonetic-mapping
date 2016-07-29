@@ -28,13 +28,12 @@ function userOptions = phoneticMappingOptions()
 userOptions.analysisName = 'lexpro-fixed-feature-matrix';
 
 % This is the root directory of the project.
-userOptions.rootPath = '/imaging/cw04/Neurolex/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100p';
+userOptions.rootPath = '/imaging/cw04/CSLB/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100p';
 
 % The path leading to where the scans are stored (not including subject-specific identifiers).
 % "[[subjectName]]" should be used as a placeholder to denote an entry in userOptions.subjectNames
 % "[[betaIdentifier]]" should be used as a placeholder to denote an output of betaCorrespondence.m if SPM is not being used; or an arbitrary filename if SPM is being used.
-%userOptions.betaPath = '/imaging/at03/NKG_Code_output/Version4_2/LexproMEG/3-single-trial-source-data/vert10242-smooth5-nodepth-eliFM-snr1-signed/[[betaIdentifier]]';
-userOptions.betaPath = '/imaging/cw04/Neurolex/Lexpro/Data/EMEG_processed_single_trial_source/vert10242-smooth5-nodepth-eliFM-snr1-signed/[[betaIdentifier]]';
+userOptions.betaPath = '/imaging/at03/NKG_Code_output/Version4_2/LexproMEG/3-single-trial-source-data/vert10242-smooth5-nodepth-eliFM-snr1-signed/[[betaIdentifier]]';
 
 %%%%%%%%%%%%%%%%%%%
 %% Email Options %%
@@ -72,14 +71,14 @@ userOptions.flush_Queue = true;
 % i.e. when run_in_parallel_in_cluster = true;
 userOptions.wallTime = '24:00:00';
 % Cluster machines requested.
-userOptions.nodesReq = 6;
+userOptions.nodesReq = 4;
 % Processors requested per processor machine.
 userOptions.proPNode = 1;
 % The product of nodesReq and proPNode should be greater or equal to the
 % number of workers requested.
-userOptions.nWorkers = 6;
+userOptions.nWorkers = 4;
 % In gigabytes, to be distributed amongst all nodes.
-userOptions.memReq = 240;
+userOptions.memReq = 64;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Modality-agnostic analysis options %%
@@ -88,7 +87,7 @@ userOptions.memReq = 240;
 % The path to a stereotypical mask data file is stored (not including subject-specific identifiers).
 % "[[subjectName]]" should be used as a placeholder to denote an entry in userOptions.subjectNames
 % "[[maskName]]" should be used as a placeholder to denote an entry in userOptions.maskNames
-userOptions.maskPath = '/imaging/cw04/Neurolex/Lexpro/Masks/[[maskName]]';
+userOptions.maskPath = '/imaging/cw04/CSLB/Lexpro/Masks/[[maskName]]';
 %userOptions.maskPath = '/imaging/ef02/lexpro/subject/average/label/[[maskName]]';
 
 % The list of mask filenames (minus .hdr extension) to be used.
@@ -165,10 +164,8 @@ userOptions.searchlightRadius = 15;
 %% %% %% %% %%
 
 % The average surface files
-%userOptions.averageSurfaceFiles.L = '/imaging/ef02/lexpro/subject/average/surf/lh.inflated';
-userOptions.averageSurfaceFiles.L = '/imaging/cw04/Neurolex/Lexpro/Data/surfaces/lh.inflated';
-%userOptions.averageSurfaceFiles.R = '/imaging/ef02/lexpro/subject/average/surf/rh.inflated';
-userOptions.averageSurfaceFiles.R = '/imaging/cw04/Neurolex/Lexpro/Data/surfaces/rh.inflated';
+userOptions.averageSurfaceFiles.L = '/imaging/ef02/lexpro/subject/average/surf/lh.inflated';
+userOptions.averageSurfaceFiles.R = '/imaging/ef02/lexpro/subject/average/surf/rh.inflated';
 
 % The width of the sliding window (ms)
 userOptions.temporalSearchlightWidth = 60; %20;
