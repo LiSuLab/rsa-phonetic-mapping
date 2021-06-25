@@ -1,3 +1,5 @@
 # Matlab backups
 *.m~
 
+# Python
+.idea/
