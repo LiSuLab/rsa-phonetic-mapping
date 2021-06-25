@@ -40,8 +40,8 @@ function [] = resave_as_masked_stc()
                     
                     %% Save it!
 
-                    stc_file_name = sprintf('%s_sess-%02d_cond-%03d_masked.stc', ...
-                        thisSubjectName, s, c);
+                    stc_file_name = sprintf('%s_sess-%02d_cond-%03d_masked-%sh.stc', ...
+                        thisSubjectName, s, c, lower(chi));
                     stc_file_path = fullfile(stc_output_dir, stc_file_name);
                     
                     masked_data = all_masked_data(:, :, c, s);
