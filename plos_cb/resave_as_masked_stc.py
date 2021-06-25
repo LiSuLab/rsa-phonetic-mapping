@@ -8,6 +8,7 @@ from typing import List
 
 import numpy
 import mne
+from scipy.io import loadmat
 
 
 class Wildcards:
@@ -19,8 +20,8 @@ class Wildcards:
 
 class UserOptions:
     """Ported from phoneticMappingOptions.m"""
-    root_path = Path('/imaging/cw04/CSLB/Lexpro/Analysis_Phonetic_mapping/'
-                     'CWD_win60lag100p')
+    root_path = Path('/Volumes/Mordin/Work archives/2016-08-11 CBU Imaging/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100p')
+    output_path = Path("/Volumes/Mordin/Lexpro/")
     beta_path = Path(f'/imaging/at03/NKG_Code_output/Version4_2/LexproMEG/'
                      f'3-single-trial-source-data/'
                      f'vert10242-smooth5-nodepth-eliFM-snr1-signed/'
@@ -48,11 +49,12 @@ class UserOptions:
     mask_names = ['STG_STS_HG-lh', 'STG_STS_HG-rh']
     mask_time_windows = [[0, 370], [0, 370]]
     target_resolution = 10_242
+    temporal_downsample_rate = 1
 
 
 def get_beta_correspondence() -> numpy.array:
     """Ported from lexproBetaCorrespondence.m"""
-    beta_file_path = Path('/imaging/at03/NKG_Data_Sets/LexproMEG/scripts/'
+    beta_file_path = Path(UserOptions.output_path,
                           'Stimuli-Lexpro-MEG-Single-col.txt')
     with beta_file_path.open("r") as beta_file:
         beta_names = sorted(beta_file.readlines())
@@ -68,15 +70,15 @@ def get_beta_correspondence() -> numpy.array:
     return numpy.array(betas, dtype=numpy.string_)
 
 
-def direct_load(matfile_path, variable_name=None):
+def direct_load(matfile_path, variable_name):
     """
-    Loads the named variable `variable_name` from `matfile_path`, or the only
-    variable contained therein if None is supplied.
+    Loads the named variable `variable_name` from `matfile_path`.
     :param matfile_path:
     :param variable_name:
     :return:
     """
-    raise NotImplementedError()
+    mat = loadmat(matfile_path)
+    return mat[variable_name]
 
 
 def meg_mask_preparation_source() -> List[mne.Label]:
@@ -104,13 +106,12 @@ def meg_mask_preparation_source() -> List[mne.Label]:
     #     raise NotImplementedError()
 
     # Skip all that and just load what we already have
-    index_masks = direct_load(Path(UserOptions.root_path, 'ImageData', masks_filename), 'indexMasks')
-
+    index_masks = direct_load(Path(UserOptions.root_path, 'ImageData', masks_filename), 'indexMasks')[0]
     return [
         mne.Label(
-            vertices=mask.vertices,
-            hemi=f"{mask.chi.lower()}h",
-            name=mask.name,
+            vertices=mask[0].squeeze(),
+            hemi=f"{mask[1][0].lower()}h",
+            name=mask[2][0],
         )
         for mask in index_masks
     ]
@@ -149,13 +150,35 @@ def combine_vertex_masks_source(masks: List[mne.Label], mask_name) -> List[mne.L
     return masks_out
 
 
+def convert_to_stc_metadata(stc, mask: mne.Label = None):
+    """Ported from convertToSTCMetadata"""
+    n_vertices_raw, n_timepoints_raw = stc.data.shape
+    first_datapoint_time_raw = stc.tmin
+    timestep_raw = stc.tstep
+    assert n_vertices_raw >= UserOptions.target_resolution
+    n_timepoints_downsampled = len(range(0, n_timepoints_raw, step=UserOptions.temporal_downsample_rate))
+    time_step_downsampled = timestep_raw * UserOptions.temporal_downsample_rate
+    first_datapoint_time_downsampled = first_datapoint_time_raw
+    last_datapoint_time_downsampled = first_datapoint_time_downsampled + (n_timepoints_downsampled * time_step_downsampled)
+
+    stc_out = mne.SourceEstimate(
+        data=None,
+        vertices=mask.vertices if mask is not None else numpy.array(range(UserOptions.target_resolution)),
+        tmin=first_datapoint_time_downsampled,
+        tstep=time_step_downsampled,
+    )
+
+    stc_out.tmax = last_datapoint_time_downsampled
+    return stc_out
+
+
 def resave_as_masked_stc():
 
     sl_masks = meg_mask_preparation_source()
     sl_masks = combine_vertex_masks_source(sl_masks, 'combined_mask')
 
     image_data_path = Path(UserOptions.root_path, "ImageData")
-    stc_output_dir = Path(UserOptions.root_path, "ImageData_stc")
+    stc_output_dir = Path(UserOptions.output_path, "ImageData_stc")
 
     beta_correspondence: numpy.array = get_beta_correspondence()
     n_sessions, n_conditions = beta_correspondence.shape
@@ -170,13 +193,9 @@ def resave_as_masked_stc():
                                      f"_CorticalMeshes.mat")
 
             # Get metadata
-            dummy_read_path = Path(
-                UserOptions.beta_path
-                    .as_posix()
-                    .replace(Wildcards.beta_identifier, beta_correspondence[0,0])
-                    .replace(Wildcards.subject_name, subject)
-                    .replace(Wildcards.lr, chi)
-            )
+            # Don't have access to the orginal source files any more, but since we just need this for the metadata,
+            # and we know it was originally used to save these files, we can just load it from there.
+            dummy_read_path = Path("/Volumes/Mordin/Work archives/2016-08-11 CBU Imaging/Lexpro/Analysis_Phonetic_mapping/CWD_win60lag100p/ImageData_stc/meg08_0320_sess-01_cond-006_masked.stc")
             loaded_dummy_data = mne.read_source_estimate(dummy_read_path.as_posix())
             stc_metadata = convert_to_stc_metadata(stc=loaded_dummy_data,
                                                    mask=sl_masks[chi])
@@ -194,7 +213,8 @@ def resave_as_masked_stc():
                     )
 
                     masked_data = all_masked_data[:, :, condition_i, session_i].squeeze()
-                    mne.SourceEstimate(masked_data).save(stc_path.as_posix())
+                    stc_metadata.data=masked_data
+                    stc_metadata.save(stc_path.as_posix())
 
 
 if __name__ == '__main__':
